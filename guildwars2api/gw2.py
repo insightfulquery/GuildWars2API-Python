@@ -150,8 +150,9 @@ class GW2(object):
 
     def get_commerce_listings(self, *ids):
         """Returns the item trading post listing data for the item(s) with the given id(s) as a list.
-        Because of trading post regulations, you are unable to use the 'all' keyword for this endpoint.
+           If a list if ids is not supplied, all listings will be returned.
         """
+        if 
         return self._request("commerce/listings", ids=','.join(str(id) for id in ids))
 
     def get_commerce_listings_ids(self):
@@ -384,6 +385,20 @@ class GW2(object):
         self.API_KEY = key
         self.session.headers.update({"Authorization": "Bearer {}".format(key)})
         return self.get_tokeninfo(key)
+
+    def _get_many(self, endpoint, ids):
+        x = 0
+        all_objects = []
+        while x < len(ids)-200:
+            batch_objects = self._request(endpoint, ids=','.join(str(id) for id in ids[x:x+200]))
+            all_objects.extend(batch_objects)
+            x = x+200
+        
+        batch_objects = self._request(endpoint, ids=','.join(str(id) for id in ids[x:len(ids)+1))
+        all_objects.extend(batch_objects)
+        
+        return all_objects
+
 
     def _request(self, location, **kwargs):
         """Send a request to the Guild Wars 2 API."""
