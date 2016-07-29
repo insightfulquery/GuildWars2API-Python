@@ -148,11 +148,11 @@ class GW2(object):
         """Returns the current gems to coins exchange rate for the given amount of gems as a dictionary."""
         return self._request("commerce/exchange/gems", quantity=amount)
 
-    def get_commerce_listings(self, *ids=None):
+    def get_commerce_listings(self, *ids):
         """Returns the item trading post listing data for the item(s) with the given id(s) as a list.
            If a list if ids is not supplied, all listings will be returned.
         """
-        if ids is None:
+        if not ids:
             ids = self.get_commerce_listings_ids()
             
             if len(ids) <= 200:
@@ -164,11 +164,11 @@ class GW2(object):
         """Returns just all the item ids of all the items on the trading post as a list."""
         return self._request("commerce/listings")
 
-    def get_commerce_prices(self, *ids=None):
+    def get_commerce_prices(self, *ids):
         """Returns the item trading post price data for the item(s) with the given id(s) as a list.
         Because of trading post regulations, you are unable to use the 'all' keyword for this endpoint.
         """
-        if ids is None:
+        if not ids:
             ids = self.get_commerce_prices_ids()
         
         if (len) ids <= 200:
@@ -272,9 +272,9 @@ class GW2(object):
         """Returns just all the file ids as a list."""
         return self._request("files")
 
-    def get_items(self, *ids=None):
+    def get_items(self, *ids):
         """Returns the item data for the item(s) with the given id(s) as a list."""
-        if ids is None:
+        if not ids:
             ids = self.get_items_ids()
         
         if len(ids) <= 200:
@@ -335,9 +335,9 @@ class GW2(object):
         """Returns just all the quaggan ids as a list."""
         return self._request("quaggans")
 
-    def get_recipes(self, *ids=None):
+    def get_recipes(self, *ids):
         """Returns the recipe data for the recipe(s) with the given id(s) as a list."""
-        if ids is None:
+        if not ids:
             ids = self.get_recipes_ids()
         
         if len(ids) <= 200:
