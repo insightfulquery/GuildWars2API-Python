@@ -148,22 +148,33 @@ class GW2(object):
         """Returns the current gems to coins exchange rate for the given amount of gems as a dictionary."""
         return self._request("commerce/exchange/gems", quantity=amount)
 
-    def get_commerce_listings(self, *ids):
+    def get_commerce_listings(self, *ids=None):
         """Returns the item trading post listing data for the item(s) with the given id(s) as a list.
            If a list if ids is not supplied, all listings will be returned.
         """
-        if 
-        return self._request("commerce/listings", ids=','.join(str(id) for id in ids))
+        if ids is None:
+            ids = self.get_commerce_listings_ids()
+            
+            if len(ids) <= 200:
+                return self._request("commerce/listings", ids=','.join(str(id) for id in ids))
+            else:
+                return self._get_many("commerce/listings", ids)
 
     def get_commerce_listings_ids(self):
         """Returns just all the item ids of all the items on the trading post as a list."""
         return self._request("commerce/listings")
 
-    def get_commerce_prices(self, *ids):
+    def get_commerce_prices(self, *ids=None):
         """Returns the item trading post price data for the item(s) with the given id(s) as a list.
         Because of trading post regulations, you are unable to use the 'all' keyword for this endpoint.
         """
-        return self._request("commerce/prices", ids=','.join(str(id) for id in ids))
+        if ids is None:
+            ids = self.get_commerce_prices_ids()
+        
+        if (len) ids <= 200:
+            return self._request("commerce/prices", ids=','.join(str(id) for id in ids))
+        else:
+            return self._get_many("commerce/prices", ids)
 
     def get_commerce_prices_ids(self):
         """Returns just all the item ids of all the items on the trading post as a list."""
