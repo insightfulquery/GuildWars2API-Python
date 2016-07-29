@@ -171,7 +171,7 @@ class GW2(object):
         if not ids:
             ids = self.get_commerce_prices_ids()
         
-        if (len) ids <= 200:
+        if len(ids) <= 200:
             return self._request("commerce/prices", ids=','.join(str(id) for id in ids))
         else:
             return self._get_many("commerce/prices", ids)
@@ -419,7 +419,7 @@ class GW2(object):
             all_objects.extend(batch_objects)
             x = x+200
         
-        batch_objects = self._request(endpoint, ids=','.join(str(id) for id in ids[x:len(ids)+1))
+        batch_objects = self._request(endpoint, ids=','.join(str(id) for id in ids[x:len(ids)+1]))
         all_objects.extend(batch_objects)
         
         return all_objects
