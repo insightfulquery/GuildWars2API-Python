@@ -272,9 +272,15 @@ class GW2(object):
         """Returns just all the file ids as a list."""
         return self._request("files")
 
-    def get_items(self, *ids):
+    def get_items(self, *ids=None):
         """Returns the item data for the item(s) with the given id(s) as a list."""
-        return self._request("items", ids=','.join(str(id) for id in ids))
+        if ids is None:
+            ids = self.get_items_ids()
+        
+        if len(ids) <= 200:
+            return self._request("items", ids=','.join(str(id) for id in ids))
+        else:
+            return self._get_many("items", ids)
 
     def get_items_ids(self):
         """Returns just all the item ids as a list."""
@@ -329,9 +335,15 @@ class GW2(object):
         """Returns just all the quaggan ids as a list."""
         return self._request("quaggans")
 
-    def get_recipes(self, *ids):
+    def get_recipes(self, *ids=None):
         """Returns the recipe data for the recipe(s) with the given id(s) as a list."""
-        return self._request("recipes", ids=','.join(str(id) for id in ids))
+        if ids is None:
+            ids = self.get_recipes_ids()
+        
+        if len(ids) <= 200:
+            return self._request("recipes", ids=','.join(str(id) for id in ids))
+        else:
+            return self._get_many("recipes", ids)
 
     def get_recipes_ids(self):
         """Returns just all the recipe ids as a list."""
@@ -398,6 +410,8 @@ class GW2(object):
         return self.get_tokeninfo(key)
 
     def _get_many(self, endpoint, ids):
+        """Send many requests to the Guild Wars 2 API and compile them into one result.
+            Assumes that there are no duplicates in the ids list."""
         x = 0
         all_objects = []
         while x < len(ids)-200:
