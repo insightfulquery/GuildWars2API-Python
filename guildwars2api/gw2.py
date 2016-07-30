@@ -152,8 +152,13 @@ class GW2(object):
         """Returns the item trading post listing data for the item(s) with the given id(s) as a list.
            If a list if ids is not supplied, all listings will be returned.
         """
-        if 
-        return self._request("commerce/listings", ids=','.join(str(id) for id in ids))
+        if not ids:
+            ids = self.get_commerce_listings_ids()
+            
+            if len(ids) <= 200:
+                return self._request("commerce/listings", ids=','.join(str(id) for id in ids))
+            else:
+                return self._get_many("commerce/listings", ids)
 
     def get_commerce_listings_ids(self):
         """Returns just all the item ids of all the items on the trading post as a list."""
@@ -163,7 +168,13 @@ class GW2(object):
         """Returns the item trading post price data for the item(s) with the given id(s) as a list.
         Because of trading post regulations, you are unable to use the 'all' keyword for this endpoint.
         """
-        return self._request("commerce/prices", ids=','.join(str(id) for id in ids))
+        if not ids:
+            ids = self.get_commerce_prices_ids()
+        
+        if len(ids) <= 200:
+            return self._request("commerce/prices", ids=','.join(str(id) for id in ids))
+        else:
+            return self._get_many("commerce/prices", ids)
 
     def get_commerce_prices_ids(self):
         """Returns just all the item ids of all the items on the trading post as a list."""
@@ -263,7 +274,13 @@ class GW2(object):
 
     def get_items(self, *ids):
         """Returns the item data for the item(s) with the given id(s) as a list."""
-        return self._request("items", ids=','.join(str(id) for id in ids))
+        if not ids:
+            ids = self.get_items_ids()
+        
+        if len(ids) <= 200:
+            return self._request("items", ids=','.join(str(id) for id in ids))
+        else:
+            return self._get_many("items", ids)
 
     def get_items_ids(self):
         """Returns just all the item ids as a list."""
@@ -320,7 +337,13 @@ class GW2(object):
 
     def get_recipes(self, *ids):
         """Returns the recipe data for the recipe(s) with the given id(s) as a list."""
-        return self._request("recipes", ids=','.join(str(id) for id in ids))
+        if not ids:
+            ids = self.get_recipes_ids()
+        
+        if len(ids) <= 200:
+            return self._request("recipes", ids=','.join(str(id) for id in ids))
+        else:
+            return self._get_many("recipes", ids)
 
     def get_recipes_ids(self):
         """Returns just all the recipe ids as a list."""
@@ -387,6 +410,8 @@ class GW2(object):
         return self.get_tokeninfo(key)
 
     def _get_many(self, endpoint, ids):
+        """Send many requests to the Guild Wars 2 API and compile them into one result.
+            Assumes that there are no duplicates in the ids list."""
         x = 0
         all_objects = []
         while x < len(ids)-200:
@@ -394,7 +419,7 @@ class GW2(object):
             all_objects.extend(batch_objects)
             x = x+200
         
-        batch_objects = self._request(endpoint, ids=','.join(str(id) for id in ids[x:len(ids)+1))
+        batch_objects = self._request(endpoint, ids=','.join(str(id) for id in ids[x:len(ids)+1]))
         all_objects.extend(batch_objects)
         
         return all_objects
