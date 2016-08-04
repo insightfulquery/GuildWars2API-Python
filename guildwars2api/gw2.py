@@ -289,7 +289,7 @@ class GW2(object):
         
         if isinstance(ids,int):
             return self._request("items", ids=str(ids))
-        if len(ids) <= 200:
+        elif len(ids) <= 200:
             return self._request("items", ids=','.join(str(id) for id in ids))
         else:
             return self._get_many("items", ids)
