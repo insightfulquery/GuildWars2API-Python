@@ -154,11 +154,15 @@ class GW2(object):
         """
         if not ids:
             ids = self.get_commerce_listings_ids()
-            
-            if len(ids) <= 200:
-                return self._request("commerce/listings", ids=','.join(str(id) for id in ids))
-            else:
-                return self._get_many("commerce/listings", ids)
+        else:
+            ids = ids[0]
+        
+        if isinstance(ids, int):
+            return self._request("commerce/listings", ids=str(ids))
+        elif len(ids) <= 200:
+            return self._request("commerce/listings", ids=','.join(str(id) for id in ids))
+        else:
+            return self._get_many("commerce/listings", ids)
 
     def get_commerce_listings_ids(self):
         """Returns just all the item ids of all the items on the trading post as a list."""
@@ -170,8 +174,12 @@ class GW2(object):
         """
         if not ids:
             ids = self.get_commerce_prices_ids()
+        else:
+            ids = ids[0]
         
-        if len(ids) <= 200:
+        if isinstance(ids, int):
+            return self._request("commerce/prices", ids=str(ids))
+        elif len(ids) <= 200:
             return self._request("commerce/prices", ids=','.join(str(id) for id in ids))
         else:
             return self._get_many("commerce/prices", ids)
@@ -276,7 +284,11 @@ class GW2(object):
         """Returns the item data for the item(s) with the given id(s) as a list."""
         if not ids:
             ids = self.get_items_ids()
+        else:
+            ids = ids[0]
         
+        if isinstance(ids,int):
+            return self._request("items", ids=str(ids))
         if len(ids) <= 200:
             return self._request("items", ids=','.join(str(id) for id in ids))
         else:
@@ -339,8 +351,12 @@ class GW2(object):
         """Returns the recipe data for the recipe(s) with the given id(s) as a list."""
         if not ids:
             ids = self.get_recipes_ids()
+        else:
+            ids = ids[0]
         
-        if len(ids) <= 200:
+        if isinstance(ids, int):
+            return self._request("recipes", ids=str(ids))
+        elif len(ids) <= 200:
             return self._request("recipes", ids=','.join(str(id) for id in ids))
         else:
             return self._get_many("recipes", ids)
